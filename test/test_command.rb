@@ -126,7 +126,7 @@ module Cri
         simple_cmd.run(%w[])
       end
 
-      assert_equal ['Awesome moo!', '', ''], lines(out)
+      assert_equal ['Awesome moo!', '', 'ddd=false,eee=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -135,7 +135,7 @@ module Cri
         simple_cmd.run(%w[abc xyz])
       end
 
-      assert_equal ['Awesome moo!', 'abc,xyz', ''], lines(out)
+      assert_equal ['Awesome moo!', 'abc,xyz', 'ddd=false,eee=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -144,7 +144,7 @@ module Cri
         simple_cmd.run(%w[-c -b x])
       end
 
-      assert_equal ['Awesome moo!', '', 'bbb=x,ccc=true'], lines(out)
+      assert_equal ['Awesome moo!', '', 'bbb=x,ccc=true,ddd=false,eee=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -216,7 +216,7 @@ module Cri
         simple_cmd.run(%w[-a 123])
       end
 
-      assert_equal ['moo:123', 'Awesome moo!', '', 'aaa=123'], lines(out)
+      assert_equal ['moo:123', 'Awesome moo!', '', 'aaa=123,ddd=false,eee=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -246,7 +246,7 @@ module Cri
         nested_cmd.run(%w[sub])
       end
 
-      assert_equal ['Sub-awesome!', '', ''], lines(out)
+      assert_equal ['Sub-awesome!', '', 'ddd=false,eee=false,ppp=false,qqq=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -297,7 +297,7 @@ module Cri
         nested_cmd.run(%w[sup])
       end
 
-      assert_equal ['Sub-awesome!', '', ''], lines(out)
+      assert_equal ['Sub-awesome!', '', 'ddd=false,eee=false,ppp=false,qqq=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -306,7 +306,7 @@ module Cri
         nested_cmd.run(%w[-a 666 sub])
       end
 
-      assert_equal ['super:666', 'Sub-awesome!', '', 'aaa=666'], lines(out)
+      assert_equal ['super:666', 'Sub-awesome!', '', 'aaa=666,ddd=false,eee=false,ppp=false,qqq=false'], lines(out)
       assert_equal [], lines(err)
     end
 
@@ -881,9 +881,15 @@ module Cri
       assert_equal ['test? true!'], lines(out)
       assert_equal [], lines(err)
 
+      File.open('/home/eguzki/tmp/out.log', 'a') do |f|
+        f.puts "----------------- TEST ---------------"
+      end
       # test -t mid
       out, err = capture_io_while do
         cmd_a.run(%w[b -t c])
+      end
+      File.open('/home/eguzki/tmp/out.log', 'a') do |f|
+        f.puts "----------------- END TEST ---------------"
       end
       assert_equal ['test? true!'], lines(out)
       assert_equal [], lines(err)

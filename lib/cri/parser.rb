@@ -228,7 +228,7 @@ module Cri
       return if options.key?(key)
 
       value = option_defn.default
-      return unless value
+      return if value.nil?
 
       add_option(option_defn, value, transform: false)
     end

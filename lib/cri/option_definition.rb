@@ -31,6 +31,9 @@ module Cri
       if @default && @argument == :forbidden
         raise ArgumentError, 'a default value cannot be specified for flag options'
       end
+
+      # Forbidden options are false when option not present
+      @default = false if @default.nil? && @argument == :forbidden
     end
 
     def to_h

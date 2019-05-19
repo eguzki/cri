@@ -196,6 +196,13 @@ module Cri
     #   command itself and all its ancestors
     def global_option_definitions
       res = Set.new
+      File.open('/home/eguzki/tmp/out.log', 'a') do |f|
+        f.puts(option_definitions.to_s)
+        f.puts('--------- END option_definitions ------------')
+        f.puts'--------- supercommand.global_option_definitions ------------'
+        f.puts(supercommand.global_option_definitions.to_s) unless supercommand.nil?
+        f.puts'--------- END supercommand.global_option_definitions ------------'
+      end
       res.merge(option_definitions)
       res.merge(supercommand.global_option_definitions) if supercommand
       res
